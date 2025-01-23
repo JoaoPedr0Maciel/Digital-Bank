@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { LoanStatus } from "../enum/status-loan.enum";
+import { Customer } from "src/customer/entities/customer.entity";
 
 @Entity()
 export class Loan {
@@ -20,4 +21,9 @@ export class Loan {
 
   @Column()
   requestedDate: Date;
+
+  @Column()
+  @ManyToOne(() => Customer)
+  @JoinColumn()
+  customer: Customer
 }
