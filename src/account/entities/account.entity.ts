@@ -7,7 +7,7 @@ export class Account {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   accNumber: string;
 
   @Column()
