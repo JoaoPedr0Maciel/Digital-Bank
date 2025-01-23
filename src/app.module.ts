@@ -5,16 +5,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomerModule } from './customer/customer.module';
 import { AccountModule } from './account/account.module';
 import { LoanModule } from './loan/loan.module';
+import { ConfigModule } from '@nestjs/config'
+
+ConfigModule.forRoot();
 
 @Module({
   imports: [TypeOrmModule.forRoot({
     type: 'postgres',
     host: 'localhost',
     port: 5432,
-    password: 'postgres',
-    username: 'postgres',
+    password: process.env.POSTGRES_PASSWORD,
+    username: process.env.POSTGRES_USER,
     entities: [__dirname + '/**/*.entity.{js,ts}'],
-    database: 'digital_bank',
+    database: process.env.POSTGRES_DB,
     synchronize: true,
     logging: true,
   }), CustomerModule, AccountModule, LoanModule],
