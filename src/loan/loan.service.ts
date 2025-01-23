@@ -5,15 +5,34 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Loan } from './entities/loan.entity';
 import { Repository } from 'typeorm';
 import { LoanStatus } from './enum/status-loan.enum';
+import { Customer } from 'src/customer/entities/customer.entity';
 
 @Injectable()
 export class LoanService {
   constructor(
     @InjectRepository(Loan)
-    private loanRepository: Repository<Loan>
+    private loanRepository: Repository<Loan>,
+
+    @InjectRepository(Customer)
+    private customerRepository: Repository<Customer>
   ) { }
   async create(createLoanDto: CreateLoanDto): Promise<Loan> {
-    const loan = this.loanRepository.create(createLoanDto);
+    const customer = await this.customerRepository.findOneBy({
+      id: createLoanDto.customerId
+    })
+
+    if (!customer) {
+      throw new NotFoundException('customer not found')
+    }
+
+    const loan = this.loanRepository.create({
+      requestedValue: createLoanDto.requestedValue,
+      interestRate: createLoanDto.interestRate,
+      installments: createLoanDto.installments,
+      status: LoanStatus.PENDING,
+      requestedDate: createLoanDto.requestedDate,
+      customer: customer
+    });
 
     return this.loanRepository.save(loan);
   }

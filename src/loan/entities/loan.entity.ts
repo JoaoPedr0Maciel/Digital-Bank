@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { LoanStatus } from "../enum/status-loan.enum";
 import { Customer } from "src/customer/entities/customer.entity";
+import { Exclude } from "class-transformer";
 
 @Entity()
 export class Loan {
@@ -22,8 +23,8 @@ export class Loan {
   @Column()
   requestedDate: Date;
 
-  @Column()
   @ManyToOne(() => Customer)
   @JoinColumn()
+  @Exclude()
   customer: Customer
 }

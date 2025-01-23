@@ -3,6 +3,9 @@ import { LoanStatus } from "../enum/status-loan.enum";
 
 export class CreateLoanDto {
   @IsNumber()
+  customerId: number;
+
+  @IsNumber()
   requestedValue: number;
 
   @IsNumber()

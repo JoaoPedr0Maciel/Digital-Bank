@@ -2,12 +2,19 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CustomerService } from './customer.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { ApiBadRequestResponse, ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Customer } from './entities/customer.entity';
 
 @Controller('customer')
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
   @Post()
+  @ApiOperation({ summary: 'create new customer' })
+  @ApiBody({ type: CreateCustomerDto })
+  @ApiResponse({ status: 200, description: 'created successfully' })
+  @ApiResponse({ status: 400, description: 'invalid data' })
+  @ApiResponse({ status: 409, description: 'user already exist with this email or cpf' })
   create(@Body() createCustomerDto: CreateCustomerDto) {
     return this.customerService.create(createCustomerDto);
   }
